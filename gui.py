@@ -255,7 +255,10 @@ def main():
         with st.spinner('Training models... Please wait...'):
             df = filter_dtype(df)
             X, y = genrate_X_y(df, target_column)
+            # X = min_max_scale(X)
             X_train, X_test, y_train, y_test = genrate_train_test_split(X, y, test_split, 1)
+            X_train = min_max_scale(X_train)
+            
 
             automl = SimpleAutoML()
             results = automl.train_evaluate_all(X_train, X_test, y_train, y_test)
