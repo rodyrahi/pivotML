@@ -51,14 +51,16 @@ def genrate_X_y(df, target_column):
 
     return X, y
 
-def min_max_scale(X , fit=True):
-    if fit:
-        scaler = MinMaxScaler()
-        X_scaled = scaler.fit(X)
-        return X_scaled
-    else:
-        X_scaled = scaler.fit_transform(X)
-        return X_scaled
+def min_max_scale(X_train , X_test):
+    scaler = MinMaxScaler()
+    scaler = scaler.fit(X_train)
+    X_train = scaler.transform(X_train)
+
+    X_test = scaler.transform(X_test)
+
+    return X_train , X_test
+
+    
 
 def genrate_train_test_split(X, y , test_size=0.4 , random_state=1):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=1)
