@@ -1,3 +1,4 @@
+import pickle
 import streamlit as st
 import pandas as pd
 
@@ -262,20 +263,22 @@ def main():
 
 
             automl = SimpleAutoML()
-            results = automl.train_evaluate_all(X_train, X_test, y_train, y_test)
+            results , models = automl.train_evaluate_all(X_train, X_test, y_train, y_test)
             best_model_name, best_model, best_score = automl.get_best_model(X_train, X_test, y_train, y_test)
 
+            # st.success(results)
             # Display model results
             st.subheader("Model Results 📊")
 
             # Create a container to hold the results
             with st.container():
                 cols = st.columns(len(results))  # Create columns for each model
-                
+               
                 for col, (model_name, score_data) in zip(cols, results.items()):
-                    score = score_data['Accuracy']  # Extract score
-                    
-                    print(score)
+                    # score = score_data['Accuracy']  # Extract score
+                    test_accuracy = score_data['Test Accuracy']
+                    train_accuracy = score_data['Train Accuracy']                    
+                    # print(score)
 
                     with col:
                         html_card = f'''<div style="
@@ -284,10 +287,25 @@ def main():
                                         border-radius: 10px; text-align: center; 
                                         box-shadow: 2px 2px 10px rgba(0,0,0,0.1);"> 
                                         <h4 style="">{model_name}</h4> 
-                                        <p style="font-size: 20px; font-weight: bold; color: #0098C3;">Accuracy: {score:.4f}</p>
+                                        <p style="font-size: 20px; font-weight: bold; color: #0098C3;"> 
+                                        Test Accuracy: {test_accuracy:.4f}
+                                        Train Accuracy: {train_accuracy:.4f}
+                                        </p>
                                         </div>'''
                         print(html_card) 
+                        
                         st.markdown(html_card, unsafe_allow_html=True)
+                        download_button = st.download_button(
+                            label=f"Download {model_name} Model",
+                            data=pickle.dumps(models[model_name]),
+                            file_name=f"{model_name}.pkl",
+                            mime="application/octet-stream"
+                        )
+
+
+                        if download_button:
+                            st.success(f"Model {model_name} downloaded successfully!")
+
 
             st.success(f"🏆 Best Model: {best_model_name} with score: {best_score:.4f}")
 

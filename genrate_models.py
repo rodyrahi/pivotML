@@ -96,6 +96,8 @@ class SimpleAutoML:
         
     def train_evaluate_all(self, X_train, X_test, y_train, y_test , is_regression = False):
         
+
+        models = {}
         is_regression = self.is_regression
         results = {}
         
@@ -122,23 +124,26 @@ class SimpleAutoML:
                 # Train the model
                 model.fit(X_train, y_train )
                 
-                
+                models.update({name: model})
                 y_pred = model.predict(X_test)
                 
 
-                score = accuracy_score(y_test, y_pred)
+                test_accuracy = accuracy_score(y_test, y_pred)
+                train_accuracy = accuracy_score(y_train, model.predict(X_train))
                 metric_name = 'Accuracy'
 
                 f1score = f1_score(y_test, y_pred , average='weighted')
 
-                results[name] = {metric_name: score  , 'F1 Score': f1score}
+
+
+                results[name] = {"Test Accuracy": test_accuracy , "Train Accuracy" : train_accuracy  , 'F1 Score': f1score }
             
-        return results   
+        return results , models
 
     
      
     def get_best_model(self, X_train, X_test, y_train, y_test):
-        results = self.train_evaluate_all(X_train, X_test, y_train, y_test)
+        results , models = self.train_evaluate_all(X_train, X_test, y_train, y_test)
         best_score = -float('inf')
         best_model = None
         
