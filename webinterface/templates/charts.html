@@ -1,0 +1,89 @@
+<div>
+    <h2>Distribution Chart</h2>
+    <svg id="myChart"></svg>
+  </div>
+  
+  <script>
+    (function() {
+      // Convert server-side data to JSON
+      const distribution = {{ distribution|tojson }};
+      
+      // Set dimensions
+      const margin = {top: 20, right: 20, bottom: 30, left: 40};
+      const width = 600 - margin.left - margin.right;
+      const height = 400 - margin.top - margin.bottom;
+
+      // Create SVG container
+      const svg = d3.select("#myChart")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+      // Convert data to array format and limit data points if too many
+      const maxDataPoints = 50;
+      let data = Object.entries(distribution).map(([key, value]) => ({key, value}));
+      
+      if (data.length > maxDataPoints) {
+        // Sort by value and keep top entries
+        data = data.sort((a, b) => b.value - a.value).slice(0, maxDataPoints);
+      }
+
+      // Create scales with memoization
+      const x = d3.scaleBand()
+        .range([0, width])
+        .padding(0.1);
+
+      const y = d3.scaleLinear()
+        .range([height, 0]);
+
+      // Set domains once
+      const xDomain = data.map(d => d.key);
+      const yDomain = [0, d3.max(data, d => d.value)];
+      x.domain(xDomain);
+      y.domain(yDomain);
+
+      // Create color scale
+      const colorScale = d3.scaleOrdinal()
+        .range(['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEEAD', 
+                '#D4A5A5', '#9B59B6', '#3498DB', '#F1C40F', '#2ECC71',
+                '#E74C3C', '#1ABC9C', '#F39C12', '#8E44AD', '#16A085']);
+
+      // Use requestAnimationFrame for smooth rendering
+      requestAnimationFrame(() => {
+        // Add X axis
+        svg.append("g")
+          .attr("transform", `translate(0,${height})`)
+          .call(d3.axisBottom(x))
+          .selectAll("text")
+          .style("text-anchor", "end")
+          .attr("dx", "-.8em")
+          .attr("dy", ".15em")
+          .attr("transform", "rotate(-45)");
+
+        // Add Y axis
+        svg.append("g")
+          .call(d3.axisLeft(y));
+
+        // Add bars with data binding optimization
+        const bars = svg.selectAll("rect")
+          .data(data, d => d.key);
+
+        bars.enter()
+          .append("rect")
+          .attr("x", d => x(d.key))
+          .attr("y", d => y(d.value))
+          .attr("width", x.bandwidth())
+          .attr("height", d => height - y(d.value))
+
+          .attr("fill", (d, i) => colorScale(i))
+          .attr("opacity", 0.8)
+          .on("mouseover", function() {
+            d3.select(this).attr("opacity", 1);
+          })
+          .on("mouseout", function() {
+            d3.select(this).attr("opacity", 0.8);
+          });
+      });
+    })();
+  </script>

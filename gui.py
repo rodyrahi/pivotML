@@ -36,7 +36,7 @@ def main():
     if uploaded_file is not None:
         st.success("File uploaded successfully! 👍")
 
-        tab_basic, tab_advanced = st.tabs(["Basic Settings", "Advanced Settings"])
+        tab_basic, tab_advanced , tab_hyper = st.tabs(["Basic Settings", "Advanced Settings" , "Hyperparameter Tuning"])
         
         with tab_basic:
 
@@ -160,34 +160,34 @@ def main():
                                 format="%.4f",
                                 help="Step size for model parameter updates")       
 
-            with st.expander("🌲 Random Forest Settings"):
-                            col1, col2 = st.columns(2)
+            # with st.expander("🌲 Random Forest Settings"):
+            #                 col1, col2 = st.columns(2)
                             
-                            with col1:
-                                n_estimators = st.number_input("Number of Trees 🌳", 
-                                    min_value=10, 
-                                    max_value=1000, 
-                                    value=100,
-                                    help="Number of trees in the forest")
+            #                 with col1:
+            #                     n_estimators = st.number_input("Number of Trees 🌳", 
+            #                         min_value=10, 
+            #                         max_value=1000, 
+            #                         value=100,
+            #                         help="Number of trees in the forest")
                                 
-                                max_depth = st.number_input("Maximum Depth 📏", 
-                                    min_value=1, 
-                                    max_value=50, 
-                                    value=10,
-                                    help="Maximum depth of each tree")
+            #                     max_depth = st.number_input("Maximum Depth 📏", 
+            #                         min_value=1, 
+            #                         max_value=50, 
+            #                         value=10,
+            #                         help="Maximum depth of each tree")
                             
-                            with col2:
-                                min_samples_split = st.number_input("Minimum Samples Split 🔀", 
-                                    min_value=2, 
-                                    max_value=20, 
-                                    value=2,
-                                    help="Minimum samples required to split internal node")
+            #                 with col2:
+            #                     min_samples_split = st.number_input("Minimum Samples Split 🔀", 
+            #                         min_value=2, 
+            #                         max_value=20, 
+            #                         value=2,
+            #                         help="Minimum samples required to split internal node")
                                 
-                                min_samples_leaf = st.number_input("Minimum Samples Leaf 🍃", 
-                                    min_value=1, 
-                                    max_value=20, 
-                                    value=1,
-                                    help="Minimum samples required at leaf node")
+            #                     min_samples_leaf = st.number_input("Minimum Samples Leaf 🍃", 
+            #                         min_value=1, 
+            #                         max_value=20, 
+            #                         value=1,
+            #                         help="Minimum samples required at leaf node")
             
             with st.expander("🎯 XGBoost Settings"):
                 col1, col2 = st.columns(2)
@@ -247,6 +247,25 @@ def main():
                         help="Degree of polynomial kernel function")
 
 
+
+        with tab_hyper:
+             with st.expander("🔢 Random Forest"):
+                col1, col2 = st.columns(2)
+
+                with col1:
+                    n_estimators_rf = st.number_input("Number of Trees 🌳",
+                        min_value=10,
+                        max_value=1000,
+                        value=100,
+                        help="Number of trees in the forest")
+
+                    max_depth_rf = st.number_input("Maximum Depth 📏",
+                        min_value=1,
+                        max_value=50,
+                        value=10,
+                        help="Maximum depth of each tree")
+
+
     col1, col2, col3 = st.columns([1, 1, 1])  # Create columns to center the button
     with col1:
   
@@ -293,7 +312,7 @@ def main():
                                         </p>
                                         </div>'''
                         print(html_card) 
-                        
+
                         st.markdown(html_card, unsafe_allow_html=True)
                         download_button = st.download_button(
                             label=f"Download {model_name} Model",

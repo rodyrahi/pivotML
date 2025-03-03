@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PivotML</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/htmx.org@1.9.6"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+        }
+        #sidebar-wrapper {
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="d-flex " style="height: 100%;">
+        <div class="bg-light border-right p-1" id="sidebar-wrapper" style="width: 250px;">
+            <!-- <div class="sidebar-heading">Side Panel</div> -->
+            <div class="list-group list-group-flush">
+                <h1 class="">PivotML</h1>
+                <div class="sidebar-heading">Target</div>
+                <a hx-get="/targets" hx-target="#content-area" class="list-group-item list-group-item-action bg-light text-primary">Target</a>
+                <a hx-get="/targets" hx-target="#content-area" class="list-group-item list-group-item-action bg-light text-primary">Test/Train</a>
+                
+                <div class="sidebar-heading">Features</div>
+                <a hx-get="/targets"  hx-target="#content-area" class="list-group-item list-group-item-action bg-light text-primary" style="cursor: pointer;">Target</a>
+                <a hx-get="/targets" hx-target="#content-area" class="list-group-item list-group-item-action bg-light text-primary">Test/Train</a>
+
+                
+                {% for item in items %}
+                <a href="{{ item.link }}" class="list-group-item list-group-item-action bg-light">{{ item.text }}</a>
+                {% endfor %}
+                </div>
+            </div>
+            <div class="container-fluid" id="content-area" >
+                <h1 class="mt-4">Welcome to My Flask App</h1>
+                <p>This is a simple HTML page served using Flask.</p>
+
+            </div>
+
+        </div>

@@ -1,0 +1,23 @@
+target
+    is reg , target
+
+train/test
+    ratio
+    random seed
+    cross validation
+
+matrics
+    all the matrics
+
+feature 
+    features needed
+    scalling 
+    featrure genration 
+    feature reduction 
+
+algorithm
+    select algorithm , hyper parameter 
+    hyper parameter tuning auto 
+
+realtime 
+    stats
