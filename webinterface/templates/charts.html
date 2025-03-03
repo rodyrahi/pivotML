@@ -75,7 +75,6 @@
           .attr("y", d => y(d.value))
           .attr("width", x.bandwidth())
           .attr("height", d => height - y(d.value))
-
           .attr("fill", (d, i) => colorScale(i))
           .attr("opacity", 0.8)
           .on("mouseover", function() {
