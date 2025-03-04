@@ -1,13 +1,15 @@
 
 <div class="container-fluid p-1">
 
-<div class="row">
-    <h4>Algorithms</h4>
-</div>
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h4">Algorithms</span>
+        </div>
+    </nav>
 <div class="row">
     <!-- Left column with algorithms -->
     <div class="col-md-4" style="overflow-y: auto; height: calc(100vh - 120px);">
-        {% for algorithm in algorithms %}
+        {% for algorithm , isthere in algorithms %}
         <div class="card" style="border-radius: 0;">
             <div class="card-body py-1">
                 <div class="row align-items-center">
@@ -17,11 +19,11 @@
                     <div class="col-auto">
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" role="switch" id="switch-{{algorithm}}" 
-                                checked
+                                {% if isthere %}checked{% endif %}
                                 hx-trigger="change"
                                 hx-target="#right-column"
                                 hx-swap="none"
-                                onchange="this.setAttribute('hx-get', this.checked ? '/add-algo/{{algorithm}}' : '/remove-algo/{{algorithm}}'); htmx.ajax('GET', this.getAttribute('hx-get'), { target: '#right-column', swap: 'innerHTML' })">
+                                onchange="this.setAttribute('hx-get', this.checked ? '/add_algorithm/{{algorithm}}' : '/remove_algorithm/{{algorithm}}'); htmx.ajax('GET', this.getAttribute('hx-get'), { target: '#right-column', swap: 'none' })">
                             <label class="form-check-label" for="switch-{{algorithm}}"></label>
                         </div>
                     </div>

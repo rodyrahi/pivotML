@@ -1,22 +1,80 @@
-  
+<div class="container-fluid">
+  <div class="row">
+    <div class="col" style="overflow-y: auto; height: calc(100vh - 130px);">
+      <h5 class="mb-4 fs-6">{{ column_name }}</h5>
+
+
+      <div class="row ">
 
 
 
-
-  <div class="container-fluid">
-    
-    <h5>{{ column_name }}</h5>
-    
-    
-    <div class="form-group mb-3">
-            <label for="scale-select" class="form-label">Select Scaling Method:</label>
-            <select id="scale-select" class="form-control">
+        <div class="col p-0 " style="width: 100%;">
+          <div class="form-group mb-3">
+            <div class="d-flex align-items-center mb-2">
+              <label for="scale-select-1" class="me-2 small" style="width: 140px;">Scaling Method:</label>
+              <select id="scale-select-1" class="form-control form-control-sm" style="width: 150px;">
                 <option value="minmax">MinMax Scaler</option>
                 <option value="standard">Standard Scaler</option>
                 <option value="robust">Robust Scaler</option>
                 <option value="normalizer">Normalizer</option>
-            </select>
-        </div>
-      {% extends "charts.html" %}
+              </select>
+            </div>
     
+            <div class="d-flex align-items-center mb-2">
+              <label for="scale-select-2" class="me-2 small" style="width: 140px;">Missing Values:</label>
+              <select id="scale-select-2" class="form-control form-control-sm" style="width: 150px;">
+                <option value="impute">Impute with mean</option>
+                <option value="impute">Impute with median</option>
+                <option value="impute">Impute with mode</option>
+                
+                <option value="drop">Drop</option>
+
+              </select>
+            </div>
+    
+          
+          </div>
+        </div>
+
+        <div class="col d-flex p-0 ">
+          <div class="form-group mb-3">
+            <div class="d-flex align-items-center mb-2">
+              <label for="scale-select-1" class="me-2 small" style="width: 140px;">Variable Type:</label>
+              <select id="scale-select-1" class="form-control form-control-sm" style="width: 150px;">
+                <option value="categorical">Categorical</option>
+                <option value="numerical">Numerical</option>
+                <option value="text">Text</option>
+                <option value="vector">Vector</option>
+              </select>
+            </div>
+    
+            <!-- <div class="d-flex align-items-center mb-2">
+              <label for="scale-select-2" class="me-2 small" style="width: 140px;">Missing Values:</label>
+              <select id="scale-select-2" class="form-control form-control-sm" style="width: 150px;">
+                <option value="minmax">MinMax Scaler</option>
+                <option value="standard">Standard Scaler</option>
+                <option value="robust">Robust Scaler</option>
+                <option value="normalizer">Normalizer</option>
+              </select>
+            </div> -->
+    
+          
+          </div>
+        </div>
+
+
+
+
+
+      </div>
+     
+
+      
+
+
+
+      {% include "boxplot.html" %}
+      {% include "charts.html" %}
+    </div>
   </div>
+</div>

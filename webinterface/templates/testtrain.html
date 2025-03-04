@@ -1,0 +1,37 @@
+    <div class="container-fluid p-1">
+
+        <nav class="navbar navbar-light bg-light">
+            <div class="container-fluid">
+                <span class="navbar-brand mb-0 h4">Test Train Split</span>
+            </div>
+        </nav>
+    <div class="row">
+        <div class="col-md-4" style="overflow-y: auto; height: calc(100vh - 120px);">
+            <h2>{{testtrainsplit*100}}</h2>
+            <div class="form-group mb-4">
+                <label for="trainTestSplit" class="form-label fw-bold">Train/Test Split Ratio:</label>
+                <input type="range" class="form-range" id="trainTestSplit" min="0" max="100" value="{{testtrainsplit*100}}" step="5">
+                <div class="mt-2">
+                    <span id="splitValue" class="badge bg-primary fs-6">{{testtrainsplit*100}}% Training / 20.0% Testing</span>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+        
+        </div>
+  
+    </div>
+
+
+    </div>
+    <script>
+        document.getElementById('trainTestSplit').addEventListener('input', function() {
+            const trainValue = this.value;
+            const testValue = 100 - trainValue;
+            document.getElementById('splitValue').textContent = 
+                `${trainValue}.0% Training / ${testValue}.0% Testing`;
+        
+            fetch(`/update_split/${trainValue/100}`)
+                .catch(error => console.error('Error:', error));
+        });
+    </script>

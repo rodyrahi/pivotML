@@ -1,62 +1,33 @@
-    
-    
-    
-    
     <div class="container-fluid p-1">
-        <div class="row">
-            <h4>Columns</h4>
-
-        </div>
-        <div class="row">
-            <!-- Left column with targets -->
+        <nav class="navbar navbar-light bg-light">
+            <div class="container-fluid">
+                <span class="navbar-brand mb-0 h4">Target</span>
+            </div>
+        </nav>
+        <div class="row my-1">
             <div class="col-md-4" style="overflow-y: auto; height: calc(100vh - 120px);">
-                {% for col , isthere  in targets %}
-                <div class="card " style="border-radius: 0;">
-                    <div class="card-body py-1">
-                        <div class="row align-items-center">
-                            <div class="col">
-                                <h6 class="card-title text-dark mb-0" style="cursor: pointer; font-size: 12px;" hx-get="/column/{{col}}" hx-target="#right-column" hx-trigger="click"  >{{ col }}</h6>
-                            </div>
-
-                            
-                            <div class="col-auto">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" role="switch" id="switch-{{ col }}" 
-                                         {% if isthere %}checked{% endif %}
-                                        hx-trigger="change"
-                                        hx-target="#right-column"
-                                        hx-swap="none"
-                                        onchange="this.setAttribute('hx-get', this.checked ? '/add/{{ col }}' : '/remove/{{ col }}'); htmx.ajax('GET', this.getAttribute('hx-get'), { col: '#right-column', swap: 'none' })">
-                                    <label class="form-check-label" for="switch-{{ col }}"></label>
-                                </div>
-                            </div>
-                            
-                            
-                            
-                                                    
-                            
-
-                            
-                        </div>
+                <div class="form-group row my-2">
+                    <label for="predictionType" class="col-sm-4 col-form-label">Prediction Type:</label>
+                    <div class="col-sm-8 ">
+                        <select class="form-control" id="predictionType" name="predictionType">
+                            <option value="classification">Multi Classification</option>
+                            <option value="classification">Binary Classification</option>
+                            <option value="regression">Regression</option>
+                        </select>
                     </div>
                 </div>
-                {% endfor %}
+    
+    
+    
+                <div class="form-group row">
+                    <label for="targetColumn" class="col-sm-4 col-form-label">Target Column:</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="targetColumn" name="targetColumn">
+                        </select>
+                    </div>
+                </div>
             </div>
-            <!-- Right column -->
-            <div class="col-md-8" id="right-column" style="height: calc(100vh - 56px); overflow-y: auto;">
-                <!-- Content will be loaded here -->
-            </div>
+
+       
         </div>
-
-
-
-
-  
-            
-
-
-    </div>
-
-
-
-
+        </div>

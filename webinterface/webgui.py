@@ -10,6 +10,11 @@ algorithms_use = [('Random Forest' , True), ('Decision Tree' , True),
                   ('Neural Network' , True)]
 
 
+
+testtrainsplit = 0.4
+
+
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -28,8 +33,8 @@ def home():
 @app.route('/targets')
 def targets():
         # print(features_use)
-        targets = df.columns.tolist()
-        return render_template('targets.html', targets=features_use)
+        
+        return render_template('targets.html')
 
 
 @app.route('/add/<column_name>')
@@ -39,6 +44,7 @@ def add(column_name):
             features_use[i] = (feature, True)
     print(column_name , 'added')
     return '',200
+
 @app.route('/remove/<column_name>')
 def remove(column_name):
     for i, (feature, _) in enumerate(features_use):
@@ -47,24 +53,65 @@ def remove(column_name):
     print(column_name, 'removed')
     return '', 200
 
+@app.route('/add_algorithm/<algorithm_name>')
+def add_algorithm(algorithm_name):
+    for i, (algorithm, _) in enumerate(algorithms_use):
+        if algorithm == algorithm_name:
+            algorithms_use[i] = (algorithm, True)
+    print(algorithm_name, 'added')
+    return '', 200
+
+@app.route('/remove_algorithm/<algorithm_name>')
+def remove_algorithm(algorithm_name):
+    for i, (algorithm, _) in enumerate(algorithms_use):
+        if algorithm == algorithm_name:
+            algorithms_use[i] = (algorithm, False)
+    print(algorithm_name, 'removed')
+    return '', 200
+
+
+
+
 @app.route('/column/<column_name>')
 def column(column_name):
-
     
     if column_name not in df.columns:
         return f"Column '{column_name}' not found.", 404
 
     distribution = df[column_name].value_counts().to_dict()
-    print(distribution)
-    return render_template('column.html', column_name=column_name, distribution=distribution)
+    boxplot_data = df[column_name].tolist()
+    print(boxplot_data)
+    return render_template('column.html', column_name=column_name, distribution=distribution, boxplot_data=boxplot_data)
 
 
 
 @app.route('/algorithms')
 def algorithms():
 
-    algorithms_labels = ['Random Forest', 'Decision Tree', 'Logistic Regression' ,'Linear Regression', 'SVM' , 'KNN', 'Neural Network']
-    return render_template('algorithms.html', algorithms=algorithms_labels)
+    return render_template('algorithms.html', algorithms=algorithms_use)
+
+
+
+
+
+
+
+
+@app.route('/testtrain')
+def testtrain():
+    print(testtrainsplit)
+    return render_template('testtrain.html' , testtrainsplit = testtrainsplit)
+
+@app.route('/update_split/<float:split_value>')
+def update_split(split_value):
+    global testtrainsplit
+    testtrainsplit = split_value
+    print(f'Test-train split updated to: {testtrainsplit}')
+    return '', 200
+
+@app.route('/feature_handling')
+def feature_handling():
+    return render_template('feature_handling.html', targets=features_use)
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
