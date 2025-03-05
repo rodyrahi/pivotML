@@ -9,6 +9,8 @@ algorithms_use = [('Random Forest' , True), ('Decision Tree' , True),
                   ('Logistic Regression' , True) ,('Linear Regression' , True), ('SVM' , True) , ('KNN' , True), 
                   ('Neural Network' , True)]
 
+target_column = ''
+
 
 
 testtrainsplit = 0.4
@@ -17,7 +19,7 @@ testtrainsplit = 0.4
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/index')
 def home():
     items = [
         {'name': 'Item 1', 'link': '/item1' , 'text': 'Item 1'},
@@ -32,9 +34,18 @@ def home():
 
 @app.route('/targets')
 def targets():
-        # print(features_use)
         
-        return render_template('targets.html')
+        if target_column == '':
+            selected_target = 'No target selected'
+        else:
+            selected_target = target_column
+            
+        targets  = df.columns.tolist()
+        return render_template('targets.html' , targets = targets , selected_target = selected_target)
+
+
+
+
 
 
 @app.route('/add/<column_name>')
@@ -80,7 +91,7 @@ def column(column_name):
 
     distribution = df[column_name].value_counts().to_dict()
     boxplot_data = df[column_name].tolist()
-    print(boxplot_data)
+    
     return render_template('column.html', column_name=column_name, distribution=distribution, boxplot_data=boxplot_data)
 
 
@@ -112,6 +123,31 @@ def update_split(split_value):
 @app.route('/feature_handling')
 def feature_handling():
     return render_template('feature_handling.html', targets=features_use)
+
+
+
+
+
+@app.route('/')
+def project():
+    project = {
+        'name': 'Credit Scoring',
+        'description': 'Predict the credit score of a person based on various features.',
+        'features': features_use,
+        'algorithms': algorithms_use,
+       
+    }
+    return render_template('project.html' , project = project)
+
+
+
+
+@app.route('/add_target/<target_column_selected>')
+def add_target(target_column_selected):
+    global target_column
+    target_column = target_column_selected
+    
+    return 'Target column updated successfully', 200
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)

@@ -1,33 +1,62 @@
-    <div class="container-fluid p-1">
-        <nav class="navbar navbar-light bg-light">
-            <div class="container-fluid">
-                <span class="navbar-brand mb-0 h4">Target</span>
-            </div>
-        </nav>
-        <div class="row my-1">
-            <div class="col-md-4" style="overflow-y: auto; height: calc(100vh - 120px);">
-                <div class="form-group row my-2">
-                    <label for="predictionType" class="col-sm-4 col-form-label">Prediction Type:</label>
-                    <div class="col-sm-8 ">
-                        <select class="form-control" id="predictionType" name="predictionType">
-                            <option value="classification">Multi Classification</option>
-                            <option value="classification">Binary Classification</option>
-                            <option value="regression">Regression</option>
-                        </select>
-                    </div>
-                </div>
-    
-    
-    
-                <div class="form-group row">
-                    <label for="targetColumn" class="col-sm-4 col-form-label">Target Column:</label>
-                    <div class="col-sm-8">
-                        <select class="form-control" id="targetColumn" name="targetColumn">
-                        </select>
-                    </div>
+<div class="container-fluid p-1">
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h4">Target</span>
+        </div>
+    </nav>
+    <div class="row my-1">
+        <div class="col-md-4" style="overflow-y: auto; height: calc(100vh - 120px);">
+            <div class="form-group row my-2">
+                <label for="predictionType" class="col-sm-4 col-form-label small">Prediction Type:</label>
+                <div class="col-sm-8 ">
+                    <select class="form-control form-control-sm" id="predictionType" name="predictionType">
+                        <option value="classification">Multi Classification</option>
+                        <option value="classification">Binary Classification</option>
+                        <option value="regression">Regression</option>
+                    </select>
                 </div>
             </div>
 
-       
+
+            <div class="form-group row">
+                <label for="targetColumn" class="col-sm-4 col-form-label small">Target Column:</label>
+                <div class="col-sm-8">
+                    <select class="form-control form-control-sm" id="targetColumn" name="targetColumn"
+                        hx-trigger="change"
+                        hx-target="#right-column"
+                        onchange="updateHTMX(this)">
+                        
+                        {% if selected_target %}
+                            <option selected value="{{ selected_target }}">{{ selected_target }}</option>
+                        {% else %}
+                            <option disabled selected>Select a target</option>
+                        {% endif %}
+            
+                        {% for target in targets %}
+                            <option value="{{ target }}">{{ target }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <!-- This is the target container where the response will be displayed -->
+            <div id="right-column"></div>
+            
+            <script>
+                function updateHTMX(selectElement) {
+                    let selectedValue = selectElement.value;
+                    let url = `/add_target/${selectedValue}`;
+            
+                    // Manually trigger HTMX request
+                    htmx.ajax('GET', url, { target: '#right-column' });
+                }
+            </script>
+            
+            
+            
+                
         </div>
-        </div>
+
+
+    </div>
+</div>
