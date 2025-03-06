@@ -1,8 +1,11 @@
 from flask import Flask, render_template
 import json
 import pandas as pd
+from genrate_models import *
 
-df = pd.read_csv('creditscore.csv')
+source_file = 'Iris.csv'
+global df
+df = pd.read_csv(source_file)
 
 features_use = [(feature, True) for feature in df.columns.tolist()]
 algorithms_use = [('Random Forest' , True), ('Decision Tree' , True),
@@ -21,15 +24,8 @@ app = Flask(__name__)
 
 @app.route('/index')
 def home():
-    items = [
-        {'name': 'Item 1', 'link': '/item1' , 'text': 'Item 1'},
 
-
-        {'name': 'Item 2', 'link': '/item2' , 'text': 'Item 2'},
-        {'name': 'Item 3', 'link': '/item3' , 'text': 'Item 3'},
-        {'name': 'Item 4', 'link': '/item4' , 'text': 'Item 4'},
-    ]
-    return render_template('index.html', items=items)
+    return render_template('index.html' , source_file = source_file)
 
 
 @app.route('/targets')
@@ -241,6 +237,31 @@ def algorithm(selected_algorithm):
 
 
 
+
+
+@app.route('/train')
+def train():
+    df = pd.read_csv(source_file)
+    df = filter_dtype(df)
+    print(features_use)
+    features_use_novalues = [feature for feature, isused in features_use if isused ]
+    if target_column in features_use_novalues:
+            features_use_novalues.remove(target_column)
+    
+    print(features_use_novalues)
+    X, y = genrate_X_y(df, target_column ,  features_use_novalues)
+    # X = min_max_scale(X)
+    X_train, X_test, y_train, y_test = genrate_train_test_split(X, y, testtrainsplit, 1)
+    X_train , X_test = min_max_scale(X_train , X_test)
+
+
+
+    automl = SimpleAutoML()
+    results , models = automl.train_evaluate_all(X_train, X_test, y_train, y_test)
+    best_model_name, best_model, best_score = automl.get_best_model(X_train, X_test, y_train, y_test)
+
+    
+    return render_template('results.html' , results = results)
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)

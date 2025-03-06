@@ -38,9 +38,9 @@ def filter_dtype(df, threshold=0.95):
 def genrate_X_y(df, target_column, features=[] ):
 
     X = df.drop([target_column], axis=1)
+    
     if len(features) > 0:
         
-        X = X.drop([target_column], axis=1)
         X = X[features]
         print(X)
     for col in X.columns:

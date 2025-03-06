@@ -8,12 +8,18 @@
     'criterion': ['gini', 'entropy'],
     'random_state': 42
 } %} -->
-{{selected_algorithm}}
+
+<div class="row">
+    <h5>{{selected_algorithm}}</h5>
+</div>
+
+
 {% for param_name, param_values in algorithm_params.items() %}
 {% if loop.index0 % 2 == 0 %}<div class="row">{% endif %}
 <div class="col-md-6">
-    <div class="form-group">
-        <label for="{{ param_name }}" class="small">{{ param_name|replace('_', ' ')|title }}</label>
+    <div class="form-group row">
+        <label for="{{ param_name }}" class="col-sm-6 col-form-label small">{{ param_name|replace('_', ' ')|title }}</label>
+        <div class="col-sm-6">
         {% if param_values is number %}
             <input type="number" class="form-control form-control-sm" id="{{ param_name }}" name="{{ param_name }}" value="{{ param_values }}">
         {% else %}
@@ -23,6 +29,7 @@
                 {% endfor %}
             </select>
         {% endif %}
+        </div>
     </div>
 </div>
 {% if loop.index0 % 2 == 1 or loop.last %}</div>{% endif %}

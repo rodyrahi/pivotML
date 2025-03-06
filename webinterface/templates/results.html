@@ -1,0 +1,25 @@
+
+{% set sorted_models = results.items()|sort(attribute='1.F1 Score', reverse=True) %}
+
+<table class="results-table">
+    <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Model</th>
+            <th>Test Accuracy</th>
+            <th>Train Accuracy</th>
+            <th>F1 Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for model, metrics in sorted_models %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ model }}</td>
+            <td>{{ "%.2f"|format(metrics['Test Accuracy'] * 100) }}%</td>
+            <td>{{ "%.2f"|format(metrics['Train Accuracy'] * 100) }}%</td>
+            <td>{{ "%.2f"|format(metrics['F1 Score'] * 100) }}%</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
