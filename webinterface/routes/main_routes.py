@@ -1,25 +1,25 @@
 from flask import Blueprint, render_template
 import pandas as pd
 
-from data.database import *
+# from data.database import *
 
 from data.sql_database import *
 
 
-source_file = 'Iris.csv'
-# global df
-df = pd.read_csv(source_file)
+# source_file = 'Iris.csv'
+# # global df
+# df = pd.read_csv(source_file)
 
-features_use = [(feature, True) for feature in df.columns.tolist()]
-algorithms_use = [('Random Forest' , True), ('Decision Tree' , True),
-                  ('Logistic Regression' , True) ,('Linear Regression' , True), ('SVM' , True) , ('KNN' , True), 
-                  ('Neural Network' , True)]
+# features_use = [(feature, True) for feature in df.columns.tolist()]
+# algorithms_use = [('Random Forest' , True), ('Decision Tree' , True),
+#                   ('Logistic Regression' , True) ,('Linear Regression' , True), ('SVM' , True) , ('KNN' , True), 
+#                   ('Neural Network' , True)]
 
-target_column = ''
+# target_column = ''
 
 
 
-testtrainsplit = 0.4
+# testtrainsplit = 0.4
 
 # user_id, csv_path, dataframe, features_used, target_column, testtrainsplit, algorithms_used, metadata
 
@@ -47,4 +47,4 @@ def project():
 
 @main_routes.route('/index')
 def home():
-    return render_template('index.html')
+    return render_template('index.html' , source_file = get_project_value('1' , 'csv_path'))
