@@ -1,4 +1,6 @@
 from flask import Flask, render_template
+from flask import Blueprint
+from quick_modeling import model_routes
 import json
 import pandas as pd
 from genrate_models import *
@@ -20,7 +22,10 @@ testtrainsplit = 0.4
 
 
 
-app = Flask(__name__)
+app = Blueprint("app_routes", __name__)
+
+
+
 
 @app.route('/index')
 def home():
@@ -38,10 +43,6 @@ def targets():
             
         targets  = df.columns.tolist()
         return render_template('targets.html' , targets = targets , selected_target = selected_target)
-
-
-
-
 
 
 @app.route('/add/<column_name>')
@@ -148,10 +149,6 @@ def add_target(target_column_selected):
 
 
 
-
-
-
-
 @app.route('/algorithm/<selected_algorithm>')
 def algorithm(selected_algorithm):
 
@@ -237,8 +234,6 @@ def algorithm(selected_algorithm):
 
 
 
-
-
 @app.route('/train')
 def train():
     df = pd.read_csv(source_file)
@@ -263,5 +258,15 @@ def train():
     
     return render_template('results.html' , results = results)
 
+
+
+
+
+_app = Flask(__name__)
+
+# Register routes from routes.py
+_app.register_blueprint(app)
+_app.register_blueprint(model_routes)
+
 if __name__ == '__main__':
-    app.run(debug=True, use_reloader=True)
+    _app.run(debug=True, use_reloader=True)
