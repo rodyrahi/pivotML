@@ -1,1 +1,116 @@
-<h1>rajvendra</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quick Model Generator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .model-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 5px;
+        }
+        .parameter-section {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>Quick Model Generator</h2>
+        
+        <div class="row">
+            <div class="col-md-4">
+                <div class="model-card">
+                    <h4>Data Selection</h4>
+                    <div class="form-group">
+                        <label>Select Dataset</label>
+                        <select class="form-control" id="dataset">
+                            <option>Choose dataset...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Target Variable</label>
+                        <select class="form-control" id="target">
+                            <option>Select target...</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="model-card">
+                    <h4>Model Selection</h4>
+                    <div class="form-group">
+                        <label>Algorithm Type</label>
+                        <select class="form-control" id="algorithm">
+                            <option>Random Forest</option>
+                            <option>Gradient Boosting</option>
+                            <option>Linear Regression</option>
+                            <option>Logistic Regression</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="model-card">
+                    <h4>Training Parameters</h4>
+                    <div class="form-group">
+                        <label>Train/Test Split</label>
+                        <input type="range" class="form-control-range" id="split" min="0" max="100" value="80">
+                        <small class="form-text text-muted">Training set: <span id="splitValue">80</span>%</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Cross Validation Folds</label>
+                        <input type="number" class="form-control" id="cv_folds" value="5" min="2" max="10">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="model-card">
+                    <h4>Advanced Settings</h4>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="feature_selection">
+                        <label class="form-check-label">Enable Feature Selection</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="hyperparameter_tuning">
+                        <label class="form-check-label">Hyperparameter Tuning</label>
+                    </div>
+                </div>
+                
+                <div class="model-card">
+                    <button class="btn btn-primary btn-block" onclick="trainModel()">Train Model</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="model-card">
+                    <h4>Model Results</h4>
+                    <div id="results">
+                        <!-- Results will be displayed here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Update split value display
+        document.getElementById('split').addEventListener('input', function() {
+            document.getElementById('splitValue').textContent = this.value;
+        });
+        
+        function trainModel() {
+            // Add your model training logic here
+            const results = document.getElementById('results');
+            results.innerHTML = '<div class="alert alert-info">Training in progress...</div>';
+        }
+    </script>
+</body>
+</html>
